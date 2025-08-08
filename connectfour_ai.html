@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Connect Four — AI</title>
+  <link rel="stylesheet" href="connectfour.css" />
+</head>
+<body>
+  <div class="top-controls">
+    <button id="home-btn" title="Home">
+      <i class="fas fa-home"></i>
+    </button>
+    <button id="music-btn" title="Toggle Music">
+      <i class="fas fa-music"></i>
+    </button>
+  </div>
+
+  <audio id="bg-music" src="PvAI.mp3" loop autoplay></audio>
+
+  <div class="msg-container hide">
+    <p id="msg"></p>
+    <button id="new-btn">Reset Game</button>
+  </div>
+
+  <main>
+    <h1 class="title">Connect Four — vs AI</h1>
+
+    <!-- Removed difficulty and AI starts controls -->
+
+    <div class="container">
+      <div class="game" id="board">
+        <!-- JS will build board -->
+      </div>
+    </div>
+
+    <button id="reset-btn">Reset Game</button>
+  </main>
+
+  <script src="connectfour_ai.js"></script>
+</body>
+</html>

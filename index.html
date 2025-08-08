@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>TacTix</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="top-controls">
+    <button id="music-btn" title="Toggle Music">
+      <i class="fas fa-music"></i>
+    </button>
+  </div>
+  
+  <audio id="bgm" loop preload="auto">
+    <source src="main_audio.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+  
+  <div class="container">
+    <h1 class="title">Welcome to TacTix</h1>
+    
+    <!-- Tic Tac Toe -->
+    <div class="button-group">
+      <button id="mainGameBtn" class="btn">
+        <i class="fas fa-play"></i> Tic Tac Toe
+      </button>
+    </div>
+    <div id="modeButtons" class="button-group hidden">
+      <a href="tictactoe.html" class="btn">Player vs Player</a>
+      <a href="tictactoe_ai.html" class="btn">Player vs AI</a>
+    </div>
+
+    <!-- Connect Four -->
+    <div class="button-group">
+      <button id="connectFourBtn" class="btn">
+        <i class="fas fa-play"></i> Connect Four
+      </button>
+    </div>
+    <div id="connectFourModes" class="button-group hidden">
+      <a href="connectfour.html" class="btn">Player vs Player</a>
+      <a href="connectfour_ai.html" class="btn">Player vs AI</a>
+    </div>
+
+  </div>
+
+  <script>
+    const audio = document.getElementById('bgm');
+    const musicBtn = document.getElementById('music-btn');
+    let isPlaying = false;
+
+    window.addEventListener('click', () => {
+      if (!isPlaying) {
+        audio.play().then(() => {
+          isPlaying = true;
+          updateMusicIcon();
+        }).catch((e) => {
+          console.log("Autoplay blocked:", e);
+        });
+      }
+    }, { once: true });
+
+    musicBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      isPlaying = !isPlaying;
+      updateMusicIcon();
+    });
+
+    function updateMusicIcon() {
+      const icon = musicBtn.querySelector("i");
+      icon.className = isPlaying ? "fas fa-music" : "fas fa-volume-mute";
+    }
+
+    // Toggle Tic Tac Toe modes
+    const mainGameBtn = document.getElementById('mainGameBtn');
+    const modeButtons = document.getElementById('modeButtons');
+    mainGameBtn.addEventListener('click', () => {
+      modeButtons.classList.toggle('hidden');
+    });
+
+    // Toggle Connect Four modes
+    const connectFourBtn = document.getElementById('connectFourBtn');
+    const connectFourModes = document.getElementById('connectFourModes');
+    connectFourBtn.addEventListener('click', () => {
+      connectFourModes.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

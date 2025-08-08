@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pixelify Sans', sans-serif;
+  background: url('main_theme.png') no-repeat center center fixed;
+  background-size: cover;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 4.5rem;
+  margin-bottom: 10px;
+  text-shadow: 1.5px 1.5px #000;
+  color: #1bdf6a;
+  text-align: center;
+}
+
+.container {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game {
+  display: grid;
+  grid-template-columns: repeat(7, 10vmin);
+  grid-template-rows: repeat(6, 10vmin);
+  gap: 0.5vmin;
+  background-color: #0044cc;
+  padding: 1vmin;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  touch-action: manipulation;
+}
+
+.cell {
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0.5rem rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition: transform 0.06s ease;
+}
+
+.cell:active { transform: scale(0.98); }
+
+.cell.red {
+  background-color: #e53935;
+}
+
+.cell.yellow {
+  background-color: #fdd835;
+}
+
+#reset-btn, #new-btn {
+  display: block;
+  margin: 20px auto 0 auto;
+  font-family: 'Pixelify Sans', sans-serif;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #65a6da;
+  border: none;
+  outline: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#reset-btn:hover, #new-btn:hover {
+  background-color: #365e7e;
+  transform: scale(1.05);
+}
+
+#msg {
+  color: rgb(6, 3, 136);
+  display: inline;
+  font-size: 6vmin;
+}
+
+.msg-container {
+  height: 20vmin;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hide {
+  display: none;
+}
+
+.top-controls {
+  position: fixed;
+  top: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+#home-btn, #music-btn {
+  font-size: 1.5rem;
+  padding: 0.7rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#home-btn:hover, #music-btn:hover {
+  background-color: #dcdcdc;
+  transform: scale(1.1);
+}

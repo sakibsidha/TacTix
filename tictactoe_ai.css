@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Pixelify Sans', sans-serif;
+  background: url('main_theme.png') no-repeat center center fixed;
+  background-size: cover;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 4.5rem;
+  margin-bottom: 25px;
+  text-shadow: 1.5px 1.5px #000;
+  color: #1bdf6a;
+  text-align: center;
+}
+
+.container {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game {
+  height: 60vmin;
+  width: 60vmin;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1vmin
+}
+
+.box {
+  height: 18vmin;
+  width: 18vmin;
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3);
+  font-size: 7vmin;
+  color: #e57308;
+  background-color: white;
+}
+
+#reset-btn {
+  display: block;
+  margin: 20px auto 0 auto;
+  font-family: 'Pixelify Sans', sans-serif;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #65a6da;
+  border: none;
+  outline: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#reset-btn:hover {
+  background-color: #365e7e;
+  transform: scale(1.05);
+}
+
+#new-btn {
+  display: block;
+  margin: 0px auto 0 auto;
+  font-family: 'Pixelify Sans', sans-serif;
+  padding: 1rem;
+  font-size: 1rem;
+  background-color: #65a6da;
+  border: none;
+  outline: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#new-btn:hover {
+  background-color: #365e7e;
+  transform: scale(1.05);
+}
+
+#msg {
+  color: rgb(6, 3, 136);
+  display: inline;
+  font-size: 8vmin;
+}
+
+.msg-container {
+  height: 30vmin;
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hide {
+  display: none
+}
+
+.top-controls {
+  position: fixed;
+  top: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+#home-btn, #music-btn {
+  font-size: 1.5rem;
+  padding: 0.7rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#home-btn:hover, #music-btn:hover {
+  background-color: #dcdcdc;
+  transform: scale(1.1);
+}
