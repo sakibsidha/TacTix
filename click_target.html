@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Click the Target</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Layout */
+    body{
+      display:flex;justify-content:center;align-items:center;height:100vh;margin:0;overflow:hidden;
+    }
+    /* Game area */
+    #game{
+      position:relative;width:80vw;height:80vh;border:2px solid #1bdf6a;border-radius:12px;
+      background:rgba(0,0,0,0.6);overflow:hidden;box-shadow:0 6px 12px rgba(0,0,0,0.5);
+    }
+    #target{
+      position:absolute;width:50px;height:50px;border-radius:50%;background:red;cursor:pointer;transition:background .2s ease;
+    }
+    #scoreboard,#timer{
+      position:absolute;top:10px;font-size:1.5rem;color:#1bdf6a;text-shadow:1px 1px #000;font-weight:bold;
+    }
+    #scoreboard{left:15px;} #timer{right:15px;}
+    #gameover{
+      display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;text-align:center;color:#fff;text-shadow:2px 2px #000;
+    }
+    #restartBtn{
+      margin-top:20px;padding:12px 25px;font-size:1.2rem;background:#65a6da;border:none;border-radius:12px;cursor:pointer;color:#fff;
+      font-family:'Pixelify Sans',sans-serif;box-shadow:0 4px 6px rgba(0,0,0,0.3);transition:background .3s ease, transform .2s ease;
+    }
+    #restartBtn:hover{background:#365e7e;transform:scale(1.05);}
+
+    /* Controls positions */
+    .home-controls{position:fixed;top:15px;left:20px;z-index:1000;}
+    .music-controls{position:fixed;top:15px;right:20px;z-index:1000;}
+
+    /* MAKE THEM MATCH: same circular style for BOTH buttons */
+    #home-btn, #music-btn{
+      font-size:1.5rem;padding:.7rem;background-color:rgba(255,255,255,0.8);
+      border:none;border-radius:50%;cursor:pointer;
+      box-shadow:0 4px 6px rgba(0,0,0,0.3);
+      transition:background-color .3s ease, transform .2s ease;
+      outline:none;
+    }
+    #home-btn:hover, #music-btn:hover{background-color:#dcdcdc;transform:scale(1.1);}
+  </style>
+</head>
+<body>
+  <!-- Top-left Home -->
+  <div class="home-controls">
+    <button id="home-btn" title="Home" aria-label="Home">
+      <i class="fas fa-home"></i>
+    </button>
+  </div>
+  <!-- Top-right Music -->
+  <div class="music-controls">
+    <button id="music-btn" title="Toggle Music" aria-label="Toggle Music">
+      <i class="fas fa-music"></i>
+    </button>
+  </div>
+
+  <!-- Background Music (start muted to allow autoplay) -->
+  <audio id="bg-music" src="PvAI.mp3" loop muted></audio>
+
+  <div id="game">
+    <div id="scoreboard">Score: 0</div>
+    <div id="timer">Time: 30</div>
+    <div id="target"></div>
+    <div id="gameover">
+      Game Over!<br>
+      <span id="finalscore"></span><br>
+      <button id="restartBtn">Restart</button>
+    </div>
+  </div>
+
+  <script>
+    const game = document.getElementById("game");
+    const target = document.getElementById("target");
+    const scoreboard = document.getElementById("scoreboard");
+    const timerDisplay = document.getElementById("timer");
+    const gameover = document.getElementById("gameover");
+    const finalscore = document.getElementById("finalscore");
+    const restartBtn = document.getElementById("restartBtn");
+    const homeBtn = document.getElementById("home-btn");
+    const musicBtn = document.getElementById("music-btn");
+    const bgMusic = document.getElementById("bg-music");
+
+    let score, time, gameInterval, timerInterval;
+
+    // Ensure music starts after first user gesture (autoplay-safe)
+    let interacted = false;
+    function enableMusicOnce(){
+      if(interacted) return;
+      interacted = true;
+      bgMusic.muted = false;
+      bgMusic.volume = 0.4;
+      bgMusic.play().catch(()=>{ /* ignore */ });
+      window.removeEventListener('pointerdown', enableMusicOnce);
+      window.removeEventListener('keydown', enableMusicOnce);
+    }
+    window.addEventListener('pointerdown', enableMusicOnce);
+    window.addEventListener('keydown', enableMusicOnce);
+
+    function moveTarget() {
+      const x = Math.random() * (game.clientWidth - target.clientWidth);
+      const y = Math.random() * (game.clientHeight - target.clientHeight);
+      target.style.left = `${x}px`;
+      target.style.top = `${y}px`;
+    }
+
+    target.addEventListener("click", () => {
+      score++;
+      scoreboard.textContent = `Score: ${score}`;
+      target.style.background = "yellow";
+      setTimeout(() => { target.style.background = "red"; }, 200);
+    });
+
+    function startGame() {
+      score = 0;
+      time = 30;
+      scoreboard.textContent = `Score: ${score}`;
+      timerDisplay.textContent = `Time: ${time}`;
+      gameover.style.display = "none";
+      target.style.display = "block";
+
+      moveTarget();
+      clearInterval(gameInterval); clearInterval(timerInterval);
+      gameInterval = setInterval(moveTarget, 1000);
+      timerInterval = setInterval(() => {
+        time--;
+        timerDisplay.textContent = `Time: ${time}`;
+        if (time <= 0) {
+          clearInterval(gameInterval);
+          clearInterval(timerInterval);
+          target.style.display = "none";
+          gameover.style.display = "block";
+          finalscore.textContent = `Your Score: ${score}`;
+        }
+      }, 1000);
+    }
+
+    restartBtn.addEventListener("click", startGame);
+    homeBtn.addEventListener("click", () => { window.location.href = "index.html"; });
+
+    // Music toggle
+    let isPlaying = false; // start paused until gesture unmutes & plays
+    musicBtn.addEventListener("click", () => {
+      if (!interacted) enableMusicOnce();
+      if (isPlaying) {
+        bgMusic.pause();
+        musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      } else {
+        bgMusic.play().catch(()=>{});
+        musicBtn.innerHTML = '<i class="fas fa-music"></i>';
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // Kick off
+    startGame();
+  </script>
+</body>
+</html>
