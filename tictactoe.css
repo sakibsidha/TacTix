@@ -44,6 +44,19 @@ body {
   background-color: white;
 }
 
+.box:focus-visible {
+  outline: 3px solid #1bdf6a;
+  outline-offset: 2px;
+}
+
+.scoreboard {
+  color: #1bdf6a;
+  text-shadow: 1px 1px #000;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0 0 15px;
+}
+
 #reset-btn {
   display: block;
   margin: 20px auto 0 auto;
@@ -132,4 +145,23 @@ body {
 #home-btn:hover, #music-btn:hover {
   background-color: #dcdcdc;
   transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2.6rem;
+    margin-bottom: 10px;
+  }
+  .scoreboard {
+    font-size: 1rem;
+  }
+  .box {
+    height: 22vmin;
+    width: 22vmin;
+    font-size: 9vmin;
+  }
+  #reset-btn, #new-btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+  }
 }

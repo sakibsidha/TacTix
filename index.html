@@ -54,37 +54,9 @@
 
   </div>
 
+  <script src="shared.js"></script>
   <script>
-    const audio = document.getElementById('bgm');
-    const musicBtn = document.getElementById('music-btn');
-    let isPlaying = false;
-
-    window.addEventListener('click', () => {
-      if (!isPlaying) {
-        audio.play().then(() => {
-          isPlaying = true;
-          updateMusicIcon();
-        }).catch((e) => {
-          console.log("Autoplay blocked:", e);
-        });
-      }
-    }, { once: true });
-
-    musicBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-      isPlaying = !isPlaying;
-      updateMusicIcon();
-    });
-
-    function updateMusicIcon() {
-      const icon = musicBtn.querySelector("i");
-      icon.className = isPlaying ? "fas fa-music" : "fas fa-volume-mute";
-    }
+    initMusicToggle('music-btn', 'bgm');
 
     // Toggle Tic Tac Toe modes
     const mainGameBtn = document.getElementById('mainGameBtn');

@@ -7,46 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>Click the Target</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Layout */
-    body{
-      display:flex;justify-content:center;align-items:center;height:100vh;margin:0;overflow:hidden;
-    }
-    /* Game area */
-    #game{
-      position:relative;width:80vw;height:80vh;border:2px solid #1bdf6a;border-radius:12px;
-      background:rgba(0,0,0,0.6);overflow:hidden;box-shadow:0 6px 12px rgba(0,0,0,0.5);
-    }
-    #target{
-      position:absolute;width:50px;height:50px;border-radius:50%;background:red;cursor:pointer;transition:background .2s ease;
-    }
-    #scoreboard,#timer{
-      position:absolute;top:10px;font-size:1.5rem;color:#1bdf6a;text-shadow:1px 1px #000;font-weight:bold;
-    }
-    #scoreboard{left:15px;} #timer{right:15px;}
-    #gameover{
-      display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;text-align:center;color:#fff;text-shadow:2px 2px #000;
-    }
-    #restartBtn{
-      margin-top:20px;padding:12px 25px;font-size:1.2rem;background:#65a6da;border:none;border-radius:12px;cursor:pointer;color:#fff;
-      font-family:'Pixelify Sans',sans-serif;box-shadow:0 4px 6px rgba(0,0,0,0.3);transition:background .3s ease, transform .2s ease;
-    }
-    #restartBtn:hover{background:#365e7e;transform:scale(1.05);}
-
-    /* Controls positions */
-    .home-controls{position:fixed;top:15px;left:20px;z-index:1000;}
-    .music-controls{position:fixed;top:15px;right:20px;z-index:1000;}
-
-    /* MAKE THEM MATCH: same circular style for BOTH buttons */
-    #home-btn, #music-btn{
-      font-size:1.5rem;padding:.7rem;background-color:rgba(255,255,255,0.8);
-      border:none;border-radius:50%;cursor:pointer;
-      box-shadow:0 4px 6px rgba(0,0,0,0.3);
-      transition:background-color .3s ease, transform .2s ease;
-      outline:none;
-    }
-    #home-btn:hover, #music-btn:hover{background-color:#dcdcdc;transform:scale(1.1);}
-  </style>
+  <link rel="stylesheet" href="click_target.css" />
 </head>
 <body>
   <!-- Top-left Home -->
@@ -76,6 +37,7 @@
     </div>
   </div>
 
+  <script src="shared.js"></script>
   <script>
     const game = document.getElementById("game");
     const target = document.getElementById("target");
@@ -84,25 +46,11 @@
     const gameover = document.getElementById("gameover");
     const finalscore = document.getElementById("finalscore");
     const restartBtn = document.getElementById("restartBtn");
-    const homeBtn = document.getElementById("home-btn");
-    const musicBtn = document.getElementById("music-btn");
-    const bgMusic = document.getElementById("bg-music");
+
+    const BEST_KEY = "tactix_click_best";
+    let best = loadStats(BEST_KEY, { best: 0 }).best;
 
     let score, time, gameInterval, timerInterval;
-
-    // Ensure music starts after first user gesture (autoplay-safe)
-    let interacted = false;
-    function enableMusicOnce(){
-      if(interacted) return;
-      interacted = true;
-      bgMusic.muted = false;
-      bgMusic.volume = 0.4;
-      bgMusic.play().catch(()=>{ /* ignore */ });
-      window.removeEventListener('pointerdown', enableMusicOnce);
-      window.removeEventListener('keydown', enableMusicOnce);
-    }
-    window.addEventListener('pointerdown', enableMusicOnce);
-    window.addEventListener('keydown', enableMusicOnce);
 
     function moveTarget() {
       const x = Math.random() * (game.clientWidth - target.clientWidth);
@@ -113,7 +61,7 @@
 
     target.addEventListener("click", () => {
       score++;
-      scoreboard.textContent = `Score: ${score}`;
+      scoreboard.textContent = `Score: ${score}  |  Best: ${Math.max(score, best)}`;
       target.style.background = "yellow";
       setTimeout(() => { target.style.background = "red"; }, 200);
     });
@@ -121,7 +69,7 @@
     function startGame() {
       score = 0;
       time = 30;
-      scoreboard.textContent = `Score: ${score}`;
+      scoreboard.textContent = `Score: ${score}  |  Best: ${best}`;
       timerDisplay.textContent = `Time: ${time}`;
       gameover.style.display = "none";
       target.style.display = "block";
@@ -137,27 +85,18 @@
           clearInterval(timerInterval);
           target.style.display = "none";
           gameover.style.display = "block";
-          finalscore.textContent = `Your Score: ${score}`;
+          if (score > best) {
+            best = score;
+            saveStats(BEST_KEY, { best });
+          }
+          finalscore.textContent = `Your Score: ${score}  |  Best: ${best}`;
         }
       }, 1000);
     }
 
     restartBtn.addEventListener("click", startGame);
-    homeBtn.addEventListener("click", () => { window.location.href = "index.html"; });
-
-    // Music toggle
-    let isPlaying = false; // start paused until gesture unmutes & plays
-    musicBtn.addEventListener("click", () => {
-      if (!interacted) enableMusicOnce();
-      if (isPlaying) {
-        bgMusic.pause();
-        musicBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-      } else {
-        bgMusic.play().catch(()=>{});
-        musicBtn.innerHTML = '<i class="fas fa-music"></i>';
-      }
-      isPlaying = !isPlaying;
-    });
+    initHomeButton();
+    initMusicToggle();
 
     // Kick off
     startGame();

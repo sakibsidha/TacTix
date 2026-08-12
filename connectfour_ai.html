@@ -18,17 +18,16 @@
     </button>
   </div>
 
-  <audio id="bg-music" src="PvAI.mp3" loop autoplay></audio>
+  <audio id="bg-music" src="PvAI.mp3" loop></audio>
 
   <div class="msg-container hide">
     <p id="msg"></p>
-    <button id="new-btn">Reset Game</button>
+    <button id="new-btn">Play Again</button>
   </div>
 
   <main>
     <h1 class="title">Connect Four — vs AI</h1>
-
-    <!-- Removed difficulty and AI starts controls -->
+    <p id="scoreboard" class="scoreboard"></p>
 
     <div class="container">
       <div class="game" id="board">
@@ -39,6 +38,7 @@
     <button id="reset-btn">Reset Game</button>
   </main>
 
+  <script src="shared.js"></script>
   <script src="connectfour_ai.js"></script>
 </body>
 </html>

@@ -18,15 +18,16 @@
     </button>
   </div>
   
-  <audio id="bg-music" src="PvP.mp3" loop autoplay></audio>
-  
+  <audio id="bg-music" src="PvP.mp3" loop></audio>
+
   <div class="msg-container hide">
     <p id="msg"></p>
-    <button id="new-btn">Reset Game</button>
+    <button id="new-btn">Play Again</button>
   </div>
 
   <main>
     <h1 class="title">Connect Four</h1>
+    <p id="scoreboard" class="scoreboard"></p>
     <div class="container">
       <div class="game" id="board">
         <!-- JS will generate the 7x6 board here -->
@@ -35,6 +36,7 @@
     <button id="reset-btn">Reset Game</button>
   </main>
 
+  <script src="shared.js"></script>
   <script src="connectfour.js"></script>
 </body>
 </html>

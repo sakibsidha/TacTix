@@ -13,19 +13,18 @@ const msgContainer = document.querySelector('.msg-container');
 const msg = document.getElementById('msg');
 const resetBtn = document.getElementById('reset-btn');
 const newBtn = document.getElementById('new-btn');
-
-const HOME_BTN = document.getElementById('home-btn');
-const musicBtn = document.getElementById('music-btn');
-const audio = document.getElementById('bg-music');
-let isPlaying = true;
+const scoreboard = document.getElementById('scoreboard');
 
 // --- init UI handlers
-HOME_BTN.addEventListener('click', () => window.location.href = 'index.html');
-musicBtn.addEventListener('click', () => {
-  if (isPlaying) audio.pause(); else audio.play();
-  isPlaying = !isPlaying;
-  musicBtn.querySelector('i').className = isPlaying ? "fas fa-music" : "fas fa-volume-mute";
-});
+initHomeButton();
+initMusicToggle();
+
+const STATS_KEY = 'tactix_c4_ai_stats';
+let stats = loadStats(STATS_KEY, { you: 0, ai: 0, draws: 0 });
+
+function renderScoreboard() {
+  scoreboard.textContent = `You: ${stats.you}  |  AI: ${stats.ai}  |  Draws: ${stats.draws}`;
+}
 
 // --- Board creation & helper
 function createBoard() {
@@ -33,10 +32,12 @@ function createBoard() {
   boardEl.innerHTML = '';
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const cell = document.createElement('div');
+      const cell = document.createElement('button');
+      cell.type = 'button';
       cell.classList.add('cell');
       cell.dataset.row = r;
       cell.dataset.col = c;
+      cell.setAttribute('aria-label', `Column ${c + 1}`);
       boardEl.appendChild(cell);
     }
   }
@@ -109,9 +110,18 @@ function isBoardFull(bd) {
 }
 
 // Message & reset control
-function showWinner(text) {
-  msg.innerText = text;
+function showWinner(outcome) {
+  const messages = {
+    you: 'Player (RED) Wins!',
+    ai: 'AI (YELLOW) Wins!',
+    draw: "It's a Draw!",
+  };
+  msg.innerText = messages[outcome];
   msgContainer.classList.remove('hide');
+  if (outcome === 'draw') stats.draws++;
+  else stats[outcome]++;
+  saveStats(STATS_KEY, stats);
+  renderScoreboard();
 }
 
 function resetGame() {
@@ -261,9 +271,9 @@ function aiMove() {
   for (const col of valid) {
     const r = dropDiscInBoard(board, col, 'yellow');
     if (checkWinOnBoard(board, r, col, 'yellow')) {
-      renderBoard(); 
-      gameOver = true; 
-      showWinner('AI (YELLOW) Wins!');
+      renderBoard();
+      gameOver = true;
+      showWinner('ai');
       return;
     }
     undoDropInBoard(board, col);
@@ -278,8 +288,8 @@ function aiMove() {
       const rr = dropDiscInBoard(board, col, 'yellow');
       renderBoard();
       if (checkWinOnBoard(board, rr, col, 'yellow')) {
-        gameOver = true; 
-        showWinner('AI (YELLOW) Wins!');
+        gameOver = true;
+        showWinner('ai');
       }
       currentPlayer = 'red';
       isAITurn = false;
@@ -297,10 +307,10 @@ function aiMove() {
 
     if (checkWinOnBoard(board, rr, chosenCol, 'yellow')) {
       gameOver = true;
-      showWinner('AI (YELLOW) Wins!');
+      showWinner('ai');
     } else if (isBoardFull(board)) {
       gameOver = true;
-      showWinner("It's a Draw!");
+      showWinner('draw');
     } else {
       currentPlayer = 'red';
       isAITurn = false;
@@ -321,11 +331,11 @@ boardEl.addEventListener('click', (e) => {
 
   if (checkWinOnBoard(board, row, col, currentPlayer)) {
     gameOver = true;
-    showWinner(`Player (${currentPlayer.toUpperCase()}) Wins!`);
+    showWinner('you');
     return;
   } else if (isBoardFull(board)) {
     gameOver = true;
-    showWinner("It's a Draw!");
+    showWinner('draw');
     return;
   }
 
@@ -347,3 +357,4 @@ newBtn.addEventListener('click', () => {
 
 // Initialize game on page load
 resetGame();
+renderScoreboard();

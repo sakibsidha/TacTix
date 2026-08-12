@@ -18,28 +18,30 @@
     </button>
   </div>
   
-  <audio id="bg-music" src="PvP.mp3" loop autoplay></audio>
+  <audio id="bg-music" src="PvP.mp3" loop></audio>
   <div class="msg-container hide">
     <p id="msg"></p>
-    <button id="new-btn">Reset Game</button>
+    <button id="new-btn">Play Again</button>
   </div>
   <main>
     <h1 class="title">Tic Tac Toe</h1>
+    <p id="scoreboard" class="scoreboard"></p>
     <div class="container">
       <div class="game">
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
-        <button class="box"></button>
+        <button class="box" aria-label="Cell 1"></button>
+        <button class="box" aria-label="Cell 2"></button>
+        <button class="box" aria-label="Cell 3"></button>
+        <button class="box" aria-label="Cell 4"></button>
+        <button class="box" aria-label="Cell 5"></button>
+        <button class="box" aria-label="Cell 6"></button>
+        <button class="box" aria-label="Cell 7"></button>
+        <button class="box" aria-label="Cell 8"></button>
+        <button class="box" aria-label="Cell 9"></button>
       </div>
     </div>
     <button id="reset-btn">Reset Game</button>
   </main>
+  <script src="shared.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

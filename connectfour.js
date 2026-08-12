@@ -9,15 +9,25 @@ const msgContainer = document.querySelector('.msg-container');
 const msg = document.getElementById('msg');
 const resetBtn = document.getElementById('reset-btn');
 const newBtn = document.getElementById('new-btn');
+const scoreboard = document.getElementById('scoreboard');
+
+const STATS_KEY = 'tactix_c4_pvp_stats';
+let stats = loadStats(STATS_KEY, { red: 0, yellow: 0, draws: 0 });
+
+function renderScoreboard() {
+  scoreboard.textContent = `Red: ${stats.red}  |  Yellow: ${stats.yellow}  |  Draws: ${stats.draws}`;
+}
 
 function createBoard() {
   board = Array.from({ length: rows }, () => Array(cols).fill(null));
   boardEl.innerHTML = '';
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
-      const cell = document.createElement('div');
+      const cell = document.createElement('button');
+      cell.type = 'button';
       cell.classList.add('cell');
       cell.dataset.col = c;
+      cell.setAttribute('aria-label', `Column ${c + 1}`);
       boardEl.appendChild(cell);
     }
   }
@@ -33,9 +43,15 @@ function dropDisc(col) {
       if (checkWin(r, col)) {
         showWinner(`${currentPlayer.toUpperCase()} Wins!`);
         gameOver = true;
+        stats[currentPlayer]++;
+        saveStats(STATS_KEY, stats);
+        renderScoreboard();
       } else if (board.flat().every(cell => cell)) {
         showWinner("It's a Draw!");
         gameOver = true;
+        stats.draws++;
+        saveStats(STATS_KEY, stats);
+        renderScoreboard();
       } else {
         currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
       }
@@ -88,18 +104,9 @@ boardEl.addEventListener('click', (e) => {
 resetBtn.addEventListener('click', resetGame);
 newBtn.addEventListener('click', resetGame);
 
-// Music & Home buttons
-document.getElementById('home-btn').addEventListener('click', () => {
-  window.location.href = 'index.html';
-});
-const musicBtn = document.getElementById('music-btn');
-const audio = document.getElementById('bg-music');
-let isPlaying = true;
-musicBtn.addEventListener('click', () => {
-  if (isPlaying) audio.pause(); else audio.play();
-  isPlaying = !isPlaying;
-  musicBtn.querySelector('i').className = isPlaying ? "fas fa-music" : "fas fa-volume-mute";
-});
+initHomeButton();
+initMusicToggle();
 
 // Init
 createBoard();
+renderScoreboard();

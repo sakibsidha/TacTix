@@ -3,7 +3,11 @@ let resetBtn = document.querySelector("#reset-btn");
 let newGameBtn = document.querySelector("#new-btn");
 let msgContainer = document.querySelector(".msg-container");
 let msg = document.querySelector("#msg");
+let scoreboard = document.querySelector("#scoreboard");
 let turn0 = true;
+
+const STATS_KEY = "tactix_ttt_pvp_stats";
+let stats = loadStats(STATS_KEY, { O: 0, X: 0, draws: 0 });
 
 const winPatterns = [
   [0, 1, 2],
@@ -17,7 +21,7 @@ const winPatterns = [
 ];
 
 
-const diableBoxes = () => {
+const disableBoxes = () => {
   for (let box of boxes) {
     box.disabled = true;
   }
@@ -38,11 +42,17 @@ const resetGame = () => {
   }
 }
 
+const renderScoreboard = () => {
+  scoreboard.textContent = `O: ${stats.O}  |  X: ${stats.X}  |  Draws: ${stats.draws}`;
+};
 
 const showWinner = (winner) => {
   msg.innerText = `Congratulations, Winner is ${winner} !!!`;
   msgContainer.classList.remove("hide");
-  diableBoxes();
+  disableBoxes();
+  stats[winner]++;
+  saveStats(STATS_KEY, stats);
+  renderScoreboard();
 };
 
 
@@ -65,14 +75,16 @@ const checkWinner = () => {
   if (allFilled && !winnerFound) {
     msg.innerText = "It's a Draw!";
     msgContainer.classList.remove("hide");
-    diableBoxes();
+    disableBoxes();
+    stats.draws++;
+    saveStats(STATS_KEY, stats);
+    renderScoreboard();
   }
 };
 
 
 boxes.forEach((box) => {
   box.addEventListener("click", () => {
-    console.log("box was clicked");
     if (turn0) {
       box.innerText = "O";
       turn0 = false;
@@ -88,32 +100,6 @@ boxes.forEach((box) => {
 newGameBtn.addEventListener("click", resetGame);
 resetBtn.addEventListener("click", resetGame);
 
-const bgMusic = document.getElementById("bg-music");
-const musicBtn = document.getElementById("music-btn");
-let isMusicPlaying = true;
-
-window.addEventListener("load", () => {
-  bgMusic.play().catch(() => {
-    isMusicPlaying = false;
-    updateMusicIcon();
-  });
-});
-
-musicBtn.addEventListener("click", () => {
-  if (isMusicPlaying) {
-    bgMusic.pause();
-  } else {
-    bgMusic.play();
-  }
-  isMusicPlaying = !isMusicPlaying;
-  updateMusicIcon();
-});
-
-function updateMusicIcon() {
-  const icon = musicBtn.querySelector("i");
-  icon.className = isMusicPlaying ? "fas fa-music" : "fas fa-volume-mute";
-}
-
-document.getElementById("home-btn").addEventListener("click", () => {
-  window.location.href = "index.html";
-});
+initHomeButton();
+initMusicToggle();
+renderScoreboard();
