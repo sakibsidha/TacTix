@@ -4,6 +4,12 @@ A small browser-based arcade of classic games — Tic Tac Toe, Connect Four, and
 
 **Play it live:** https://sakibsidha.github.io/TacTix/
 
+## Screenshots
+
+| Home | Tic Tac Toe | Connect Four | Click Target |
+| --- | --- | --- | --- |
+| ![Home screen](screenshots/home.png) | ![Tic Tac Toe](screenshots/tictactoe.png) | ![Connect Four](screenshots/connectfour.png) | ![Click Target](screenshots/click-target.png) |
+
 ## Features
 
 - **Tic Tac Toe** — Player vs Player and Player vs AI modes
